@@ -4,8 +4,9 @@ var should = require('should')
 
 var _ = require('lodash')
 var superagent = require('superagent')
+var async = require('async')
 
-var couchCache = require('../.').couchCache
+var couch_cacher = require('../.').couchCache
 
 var env = process.env;
 var cuser = env.COUCHDB_USER ;
@@ -21,51 +22,7 @@ var docs = {'docs':[{'_id':'doc1'
                    ,{'_id':'doc2'
                     ,'baz':'bat'}
                    ]}
-var created_locally=false
-before(function(done){
-    // create a test db, the put data into it
-    superagent.put(couch)
-    .type('json')
-    .auth(cuser,cpass)
-    .end(function(e,r){
-        r.should.have.property('error',false)
-        if(!e)
-            created_locally=true
-        // now populate that db with some docs
-        superagent.post(couch+'/_bulk_docs')
-        .type('json')
-        .set('accept','application/json')
-        .send(docs)
-        .end(function(e,r){
-            if(e) done(e)
-            _.each(r.body
-                  ,function(resp){
-                       resp.should.have.property('ok')
-                       resp.should.have.property('id')
-                       resp.should.have.property('rev')
-                   });
-            return done()
-        })
-        return null
-    })
-})
-after(function(done){
-    if(!created_locally) return done()
-
-    var couch = 'http://'+chost+':'+cport+'/'+test_db
-    // bail in development
-    //return done()
-    superagent.del(couch)
-    .type('json')
-    .auth(cuser,cpass)
-    .end(function(e,r){
-        if(e) return done(e)
-        return done()
-    })
-    return null
-})
-
-var cacher = couchCache()
+var cacher = couch_cacher()
 describe('instantiate couchcacher',function(){
     it('should have its four methods',function(done){
         cacher.should.have.property('stash')
@@ -79,7 +36,41 @@ describe('instantiate couchcacher',function(){
 describe('use couchcacher',function(){
     it('should stash docs')
     it('should save docs')
-    it('should get docs')
     it('should reset docs')
 
+})
+
+var ts = new Date(2008,6,25,13,0).getTime()/ 1000
+var endts =  new Date(2008,6,25,15,0).getTime()/1000
+
+describe('couchCache get',function(){
+    it('can get something',function(done){
+        var get = cacher.get(function(record){console.log(record)})
+
+        async.parallel([function(cb){
+                            var feature = {'properties':{'detector_id':'1013410'
+                                                        ,'ts':ts
+                                                        ,'endts':endts
+                                                        }}
+
+                            get(feature
+                                  ,function(e,d){
+                                       console.log(d)
+                                       cb(e)
+                                   });
+                        }
+                       ,function(cb){
+                            var feature = {'properties':{'detector_id':'1010510'
+                                                        ,'ts':ts
+                                                        ,'endts':endts
+                                                        }}
+                            get(feature
+                                  ,function(e,d){
+                                       console.log(d)
+                                       cb(e)
+                                   })
+                        }]
+                      ,done)
+
+    })
 })
