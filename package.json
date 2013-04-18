@@ -1,6 +1,6 @@
 {
   "name": "calvad_couch_cacher",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "CalVAD utility to cache reduced imputations to smaller CouchDBs",
   "main": "lib/couchCache.js",
   "directories": {
@@ -10,12 +10,12 @@
     "couchdb_toQuery": "git://github.com/jmarca/couchdb_toQuery.git",
     "geom_utils": "git://github.com/jmarca/geom_utils.git",
     "couchdb_bulkdoc_saver": "git://github.com/jmarca/couchdb_bulkdoc_saver.git",
-    "lodash": "~1.2.0",
-    "superagent": "~0.14.1",
-    "async": "~0.2.7"
+    "lodash": "",
+    "superagent": "",
+    "async": ""
   },
   "devDependencies": {
-      "should": "~1.2.2"
+      "should": ""
   },
   "scripts": {
     "test": "mocha"
