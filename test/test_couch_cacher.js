@@ -8,11 +8,6 @@ var async = require('async')
 
 var couch_cacher = require('../.').couchCache
 
-var env = process.env;
-var cuser = env.COUCHDB_USER ;
-var cpass = env.COUCHDB_PASS ;
-var chost = env.COUCHDB_HOST || 'localhost';
-var cport = env.COUCHDB_PORT || 5984;
 
 var test_db ='test%2fcouch%2fcacher'
 var couch = 'http://'+chost+':'+cport+'/'+test_db
