@@ -1,6 +1,6 @@
 {
   "name": "calvad_couch_cacher",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "CalVAD utility to cache reduced imputations to smaller CouchDBs",
   "main": "lib/couchCache.js",
   "directories": {
@@ -15,7 +15,7 @@
     "async": ""
   },
   "devDependencies": {
-      "should": ""
+    "should": ""
   },
   "scripts": {
     "test": "mocha"
